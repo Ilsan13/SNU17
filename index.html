@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HTML5 with Hanbit</title>
+
+<style>
+a { text-decoration: none;}
+</style>
+
+<style>
+#Header {
+display: flex;
+justify-content: space-between;
+height: 70px;
+}
+.Title {
+right: 0px;
+font-size:50px;
+background: #ffffff;
+border : 3px solid #C948BA;
+margin: 10px 0px 0px 0px;
+padding: 5px 10px 80px 10px;
+color : Black;
+}
+.Menu {
+background: #DDDDDD;
+margin: 10px 0px 30px 20px;
+padding: 5px 10px 0px 10px;
+}
+#Booped {
+background: #DDDDDD;
+font-size: 20px;
+margin: 10px 0px 30px 20px;
+padding: 5px 10px 0px 10px;
+width: 200px;
+height: 30px;
+margin: 50px 0px 0px 0px;
+}
+#se{
+}
+.BigBackGround {
+display: flex;
+justify-content: left;
+flex-flow: wrap;
+line-height: 0px;
+margin: 50px 0px 0px 0px;
+}
+.img{
+ -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+#rainbow{
+	background-image: linear-gradient(to right, hsl( 100, 100%, 35%), hsl( 90, 100%, 40%), 
+	hsl( 80, 100%, 50%), hsl( 70, 100%, 60%), hsl( 50, 100%, 70%), hsl( 10, 100%, 50%),  hsl( 10, 100%, 70%));    
+	width: 652px;    
+	height: 30px;
+	margin: 20px 0px 0px 0px;
+.FeverBox{
+	height: 28px; width: 26px; float: left;
+	border: 2px outset #d2d0d1;
+	margin: 0px;
+}
+
+}
+
+</style>
+
+<script>
+        window.onload = function() {
+            var bnum = 1000;
+            let container = document.querySelector(".BigBackGround");
+            const div1_el = '<div class="paper"><a><img class="img" width="40px" src="https://github.com/Ilsan13/SNU17/blob/main/nonpopped.png?raw=true"></a></div>';
+            let content = '';
+            for (let i = 0; i < bnum; i++) {
+                content += div1_el;
+            }
+            container.innerHTML += content;
+
+            let popcount = 0;
+			let Score = 0;
+			let FeverTime = 0;
+            document.getElementById("Booped").innerText = "Popped Air cap : " + Score;
+
+            let img_el = document.querySelectorAll("img");
+            const feverBoxes = document.querySelectorAll(".FeverBox");
+            let maxPops = feverBoxes.length;
+
+            // 마지막 FeverBox의 width를 3배로 설정
+            if (maxPops > 0) {
+                feverBoxes[maxPops - 1].style.width = "78px";  // 26px * 3 = 78px
+            }
+
+            let reverting = false;
+            let revertInterval;
+
+			function resetFeverBoxes() {
+                for (let i = 0; i < feverBoxes.length; i++) {
+                    feverBoxes[i].style.backgroundImage = "none"; // 기본 상태로 되돌리기
+                    feverBoxes[i].style.backgroundSize = "auto";
+                }
+                reverting = false; // 상태 복원 완료
+            }
+
+            function startReverting() {
+                let index = maxPops - 1; // 마지막 FeverBox부터 시작
+                revertInterval = setInterval(() => {
+                    if (index >= 0) {
+                        feverBoxes[index].style.backgroundImage = "none"; // 기본 상태로 되돌리기
+                        feverBoxes[index].style.backgroundSize = "auto";
+						popcount--;
+                        index--;
+                    } else {
+                        clearInterval(revertInterval);
+                        // 상태가 복원된 후 클릭 시 다시 이미지 추가를 위한 초기화
+                        resetFeverBoxes();
+						FeverTime = 0;
+                    }
+                }, 50); // 50ms마다 상태 복원
+            }			
+			
+		function addEventListeners() {
+        for (let i = 0; i < img_el.length; i++) {
+            if (FeverTime >= 1) {
+                img_el[i].addEventListener('mouseleave', function() {
+                    if (img_el[i].src.includes("nonpopped.png")) {
+                        img_el[i].src = "https://github.com/Ilsan13/SNU17/blob/main/popped.png?raw=true";
+                        Score += 1;
+                        document.getElementById("Booped").innerText = "Popped Air cap : " + Score;
+                    }
+                });
+            } else {
+                img_el[i].addEventListener('click', function() {
+                    if (img_el[i].src.includes("nonpopped.png")) {
+                        img_el[i].src = "https://github.com/Ilsan13/SNU17/blob/main/popped.png?raw=true";
+                        popcount += 1;
+                        Score += 1;
+                        document.getElementById("Booped").innerText = "Popped Air cap : " + Score;
+
+                        // popcount에 따라 FeverBox의 배경 이미지 업데이트
+                        if (popcount <= maxPops) {
+                            feverBoxes[popcount - 1].style.backgroundImage = "url('https://github.com/Ilsan13/SNU17/blob/main/Feverflame.png?raw=true')";
+                            feverBoxes[popcount - 1].style.backgroundSize = "cover";
+                        }
+
+                        // 모든 FeverBox가 업데이트되면 상태를 되돌리기 시작
+                        if (popcount === maxPops && !reverting) {
+                            reverting = true;
+                            startReverting();
+                            FeverTime = 1;
+                        }
+                    }
+                });
+            }
+        }
+    }
+	addEventListeners();						
+        }
+    </script>
+</head>
+<body>
+
+<header id="Header">
+<div class="Title">
+Boop Boop Air Cap
+</div>
+<div class="Menu">
+<a href="#">Collection</a>
+</div>
+</header>
+<section id="se">
+<div id= "Booped">Popped Air cap :
+</div>
+<div id="rainbow">
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox">
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+<hr class="FeverBox"> 
+
+</div>
+<div class= "BigBackGround">
+</div>
+</section>
+
+</body>
+</html>
